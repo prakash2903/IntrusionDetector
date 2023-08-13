@@ -1,0 +1,66 @@
+
+#include <LiquidCrystal.h>
+const int rs = 13, en = 12, d4 = 11, d5 = 10, d6 = 9, d7 = 8;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+int SensorPin = A0; /// Sensor Pin
+int stopRelay = 3;////Realy pin
+int alarm = 4;//// alarm
+//int rpmMaximum = 0;
+bool starting = LOW;
+bool stoping = HIGH;
+int startingDelay = 100;
+int delayTime = 100;
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(SensorPin, INPUT_PULLUP);
+  pinMode(stopRelay, OUTPUT);
+  pinMode(alarm, OUTPUT);
+  digitalWrite(stopRelay, stoping);
+  digitalWrite(alarm, stoping);
+//  lcd.setBacklightPin(3, POSITIVE);
+ // lcd.setBacklight(LOW);
+   
+   lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+ 
+  lcd.print("OBSTACLE DETECT");
+  lcd.setCursor(0, 1);
+  lcd.print("ALARM ALERT");
+  delay(1000);
+  lcd.clear();
+  delay(startingDelay);
+}
+
+void loop()
+{
+  lcd.clear();
+
+  if (digitalRead(SensorPin) == HIGH)
+   
+  {delay(50);
+    lcd.clear();
+     lcd.setCursor(0, 0);
+  lcd.print("NO OBSTACLE ");
+  lcd.setCursor(0, 1);
+  lcd.print("NORMAL CONDITION");
+   
+    digitalWrite(stopRelay, stoping);
+    digitalWrite(alarm, stoping);
+    delay(delayTime);
+  }
+  else
+  {
+    lcd.clear();
+    lcd.clear();
+     lcd.setCursor(0, 0);
+  lcd.print("OBSTACLE DETECT");
+  lcd.setCursor(0, 1);
+  lcd.print("ALARM ON");
+  delay(100);
+    digitalWrite(stopRelay, starting);
+     digitalWrite(alarm, starting);
+  }
+  delay(100);
+}
